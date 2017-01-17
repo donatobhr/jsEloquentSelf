@@ -1,37 +1,56 @@
 //primer ejercicio
+function min(n,e){
+	var min = "";
+	if(n < e){
+		min = n;
+	}else{
+		min = e;
+	}
 
-// var hash = '';
-// for(var i = 1; i <= 7; i++){
-// 	hash += "#";
-// 	console.log(hash);
-// }
+	return min;
+}
 
+// console.log(min(10, 11))
 
 //segundo ejercicio
-// for(var i = 1; i <= 100; i++){
-// 	var output = "";
-// 	if(i % 3 == 0){
-// 		output += "Fizz";
-// 	}
 
-// 	if(i % 5 == 0){
-// 		output += "Buzz";
-// 	}
+function isEven(number){
+	if(number == 0){
+		return true;
+	}else if(number == 1){
+		return false;
+	}else if(number < 0){
+		return isEven(number + 2);
+	}else{
+		return isEven(number - 2);
+	}
+}
 
-// 	console.log(output || i);
-// }
+// console.log(isEven(50));
+// console.log(isEven(75));
+// console.log(isEven(-2));
 
 //tercer ejercicio
-var size = 8;
-var board = "";
-for(var i = 0; i < size; i++){
-	for(var j = 0; j < size; j++){
-		if((i + j) % 2 == 0){
-			board += " ";
-		}else{
-			board += "#";
+function countBs(string){
+	var count = 0;
+	for(var i = 0; i < string.length; i++){
+		if(string.charAt(i) === "B"){
+			count += 1;
 		}
 	}
-	board += "\n";
+	return count;
 }
-console.log(board);
+
+function countChar(str, char){
+	var count = 0;
+	for(var i = 0; i < str.length; i++){
+		if(str.charAt(i) === char){
+			count += 1;
+		}
+	}
+
+	return count;
+}
+
+// console.log(countBs("BBC"));
+// console.log(countChar("kakkerlak", "k"));
