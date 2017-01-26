@@ -177,6 +177,7 @@ function range(start, end, step){
 			}
 		}
 	}else{
+		if(step < 0) step = -(step);
 		if(end > start){
 			for(; start <= end; start += step){
 				arr.push(start);
@@ -200,4 +201,4 @@ function sum(arr){
 	return total;
 }
 
-console.log(range(10, 1, 1));
+console.log(range(10, 1, -5));
