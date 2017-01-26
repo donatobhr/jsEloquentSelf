@@ -206,27 +206,97 @@
 
 //Ejercicio 2
 
-function reverseArray(arr){
-	var arrRev = [];
-	for(var i = arr.length - 1; i >= 0; i--){
-		arrRev.push(arr[i]);
+// function reverseArray(arr){
+// 	var arrRev = [];
+// 	for(var i = arr.length - 1; i >= 0; i--){
+// 		arrRev.push(arr[i]);
+// 	}
+// 	return arrRev;
+// }
+
+
+// // console.log(reverseArray(['A', 'B', 'C', 'D', 'E']));
+
+// function reverseArrayInPlace(arr){
+// 	for(var i = 0; i < Math.floor(arr.length / 2); i++){
+// 		var old = arr[i];
+// 		arr[i] = arr[arr.length - 1 - i];
+// 		arr[arr.length - 1 - i] = old
+// 	}
+
+// 	return arr;
+// }
+
+// var arrayValue = [1, 2, 3, 4, 5];
+// reverseArrayInPlace(arrayValue);
+// console.log(arrayValue);
+
+
+//Ejercicio 3
+
+// function arrayToList(arr){
+// 	list = null;
+// 	for(var i = arr.length - 1; i >= 0; i--){
+// 		list = {value: arr[i], rest: list}
+// 	}
+// 	return list;
+// }
+
+// function listToArray(list){
+// 	var arr = [];
+// 	for(var node = list; node; node = node.rest){
+// 		arr.push(node.value);
+// 	}
+// 	return arr;
+// }
+
+// console.log(listToArray(arrayToList([10, 20, 30])))
+
+// function prepend(value, rest){
+// 	return {value: value, rest: rest};
+// }
+
+// function nth(list, number){
+// 	if(!list){
+// 		return undefined;
+// 	}else if(number == 0){
+// 		return list.value;
+// 	}else{
+// 		return nth(list.rest, number - 1);
+// 	}
+// }
+
+// console.log(nth(arrayToList([15, 80, 45]), 2));
+
+function deepEqual(a, b){
+	if(a === b){
+		return true;
 	}
-	return arrRev;
+
+	if(a == null || typeof a != "object" || b == null || typeof b != "object"){
+		return false;
+	}
+
+	var propsInA = 0;
+	var propsInB = 0;
+
+	for(var prop in a){
+		propsInA += 1;
+	}
+
+	for(var prop in b){
+		propsInB += 1;
+		if(!(prop in a) || !deepEqual(a[prop], b[prop])){
+			return false;
+		}
+	}
+
+	return propsInA == propsInB;
 }
 
-
-// console.log(reverseArray(['A', 'B', 'C', 'D', 'E']));
-
-function reverseArrayInPlace(arr){
-	for(var i = 0; i < Math.floor(arr.length / 2); i++){
-		var old = arr[i];
-		arr[i] = arr[arr.length - 1 - i];
-		arr[arr.length - 1 - i] = old
-	}
-
-	return arr;
-}
-
-var arrayValue = [1, 2, 3, 4, 5];
-reverseArrayInPlace(arrayValue);
-console.log(arrayValue);
+var obj = {here: {is: "an"}, object: 2};
+console.log(deepEqual(obj, obj));
+// → true
+console.log(deepEqual(obj, {here: 1, object: 2}));
+// → false
+console.log(deepEqual(obj, {here: {is: "an"}, object: 2}));
