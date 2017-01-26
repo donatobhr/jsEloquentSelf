@@ -164,41 +164,69 @@
 
 //Ejecicio 1
 
-function range(start, end, step){
-	var arr = [];
-	if(step == null || step == 1){
-		if(end > start){
-			for( ; start <= end; start++){
-			arr.push(start);
-			}
-		}else{
-			for( ; start >= end; start--){
-				arr.push(start);
-			}
-		}
-	}else{
-		if(step < 0) step = -(step);
-		if(end > start){
-			for(; start <= end; start += step){
-				arr.push(start);
-			}
-		}else{
-			for(; start >= end; start -= step){
-				arr.push(start);
-			}
-		}
+// function range(start, end, step){
+// 	var arr = [];
+// 	if(step == null || step == 1){
+// 		if(end > start){
+// 			for( ; start <= end; start++){
+// 			arr.push(start);
+// 			}
+// 		}else{
+// 			for( ; start >= end; start--){
+// 				arr.push(start);
+// 			}
+// 		}
+// 	}else{
+// 		if(step < 0) step = -(step);
+// 		if(end > start){
+// 			for(; start <= end; start += step){
+// 				arr.push(start);
+// 			}
+// 		}else{
+// 			for(; start >= end; start -= step){
+// 				arr.push(start);
+// 			}
+// 		}
+// 	}
+	
+	
+// 	return arr;
+// }
+
+// function sum(arr){
+// 	var total = 0;
+// 	for(var i = 0; i < arr.length; i++){
+// 		total += arr[i]; 
+// 	}
+// 	return total;
+// }
+
+// console.log(range(10, 1, -2));
+
+
+//Ejercicio 2
+
+function reverseArray(arr){
+	var arrRev = [];
+	for(var i = arr.length - 1; i >= 0; i--){
+		arrRev.push(arr[i]);
 	}
-	
-	
+	return arrRev;
+}
+
+
+// console.log(reverseArray(['A', 'B', 'C', 'D', 'E']));
+
+function reverseArrayInPlace(arr){
+	for(var i = 0; i < Math.floor(arr.length / 2); i++){
+		var old = arr[i];
+		arr[i] = arr[arr.length - 1 - i];
+		arr[arr.length - 1 - i] = old
+	}
+
 	return arr;
 }
 
-function sum(arr){
-	var total = 0;
-	for(var i = 0; i < arr.length; i++){
-		total += arr[i]; 
-	}
-	return total;
-}
-
-console.log(range(10, 1, -5));
+var arrayValue = [1, 2, 3, 4, 5];
+reverseArrayInPlace(arrayValue);
+console.log(arrayValue);
