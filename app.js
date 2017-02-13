@@ -33,6 +33,42 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 // console.log(filter(ancestry, function(person){
 // 	return person.born > 1900 && person.born < 1925;
 // }));
-console.log(ancestry.filter(function(person){
-	return person.born > 1900 && person.born < 1935;
-}))
+// console.log(ancestry.filter(function(person){
+// 	return person.born > 1900 && person.born < 1935;
+// }))
+
+// var byName = {};
+// ancestry.forEach(function(person){
+// 	byName[person.name] = person;
+// })
+
+// console.log(byName["Philibert Haverbeke"]);
+
+// function reduceAncestors(person,f,defaultValue){
+// 	function valueFor(person){
+// 		if(person == null)
+// 			return defaultValue;
+// 		else
+// 			return f(person,valueFor(byName[person.mother]), valueFor(byName[person.father]));
+// 	}
+// 	return valueFor(person);
+// }
+
+// function sharedDNA(person, fromMother, fromFather){
+// 	if(person.name == "Pauwels van Haverbeke")
+// 		return 1;
+// 	else
+// 		return (fromMother + fromFather) / 2;
+// }
+
+// var ph = byName["Philibert Haverbeke"];
+// console.log(reduceAncestors(ph, sharedDNA, 0) / 4);
+
+
+// var theSet = ["Carel Haverbeke", "Maria van Brussel", "Donald Duck"];
+
+// function isInSet(set, person){
+// 	return set.indexOf(person.name) > -1;
+// }
+
+// console.log(ancestry.filter(isInSet.bind(null, theSet)));
