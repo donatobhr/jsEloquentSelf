@@ -72,3 +72,15 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 // }
 
 // console.log(ancestry.filter(isInSet.bind(null, theSet)));
+
+
+
+// Ejecicio 1
+
+var arrays = [[1,2,3], [4,5], [6]];
+var array = [];
+debugger;
+console.log(arrays.reduce(function(a, b){
+	newArray = a.concat(b);
+	return array.concat(newArray);
+}));
