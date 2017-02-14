@@ -77,10 +77,43 @@ var ancestry = JSON.parse(ANCESTRY_FILE);
 
 // Ejecicio 1
 
-var arrays = [[1,2,3], [4,5], [6]];
-var array = [];
-debugger;
-console.log(arrays.reduce(function(a, b){
-	newArray = a.concat(b);
-	return array.concat(newArray);
-}));
+// var arrays = [[1,2,3], [4,5], [6]];
+// var array = [];
+// debugger;
+// console.log(arrays.reduce(function(a, b){
+// 	newArray = a.concat(b);
+// 	return array.concat(newArray);
+// }));
+
+
+
+//Ejercicio 2
+
+function average(array) {
+  function plus(a, b) { return a + b; }
+  return array.reduce(plus) / array.length;
+}
+
+var byName = {};
+ancestry.forEach(function(person) {
+  byName[person.name] = person;
+
+});
+
+// var difference = ancestry.filter(function(person){
+// 		return byName[person.mother] != null;
+// 	}).map(function(person){
+// 		return person.born - byName[person.mother].born;
+// 	})
+
+var difference = ancestry.map(function(person){
+	if(byName[person.mother] != null){
+		return person.born - byName[person.mother].born;
+	}else{
+		return null;
+	}
+}).filter(function(person){
+	return person != null;
+})
+
+console.log(average(difference));
