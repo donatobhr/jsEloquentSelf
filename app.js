@@ -90,10 +90,8 @@ function colWidth(rows){
 
 function drawTable(rows){
 	var heights = rowHeights(rows);
-	console.log(heights);
 	var widths = colWidth(rows);
-	console.log(widths);
-	
+
 	function drawLine(blocks, lineNo){
 		return blocks.map(function(block){
 			return block[lineNo];
@@ -145,9 +143,9 @@ TextCell.prototype.draw = function(width, height){
 };
 
 var rows = [];
-for(var i = 0; i < 5; i++){
+for(var i = 0; i < 2; i++){
 	var row = [];
-	for(var j = 0; j < 5; j++){
+	for(var j = 0; j < 2; j++){
 		if((j + i) % 2 === 0){
 			row.push(new TextCell("##"));
 		}else{
@@ -157,5 +155,36 @@ for(var i = 0; i < 5; i++){
 	rows.push(row);
 }
 
-console.log(rows);
-console.log(drawTable(rows));
+
+function UnderlinedCell(inner){
+	this.inner = inner;
+};
+
+UnderlinedCell.prototype.minWidth = function(){
+	return this.inner.minWidth();
+};
+
+UnderlinedCell.prototype.minHeight = function(){
+	return this.inner.minHeight() + 1;
+}
+
+UnderlinedCell.prototype.draw = function(width, height){
+	return this.inner.draw(width, height - 1).concat([repeat("-", width)]);
+}
+
+function dataTable(data){
+	var keys = Object.keys(data[0]);
+	var headers = keys.map(function(name){
+		return new UnderlinedCell(new TextCell(name));
+	});
+
+	var body = data.map(function(row){
+		return keys.map(function(name){
+			return new TextCell(String(row[name]));
+		});
+	});
+
+	return [headers].concat(body);
+}
+
+console.log(drawTable(dataTable(MOUNTAINS)));
