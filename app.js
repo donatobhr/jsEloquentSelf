@@ -16,9 +16,9 @@ function Vector(x,y){
 	this.y = y;
 }
 
-// Vector.prototype.plus = function(vector){
-// 	return new Vector(this.x + vector.x, this.y + vector.y);
-// }
+Vector.prototype.plus = function(vector){
+	return new Vector(this.x + vector.x, this.y + vector.y);
+}
 
 // Vector.prototype.minus = function(vector){
 // 	return new Vector(this.x - vector.x, this.y - vector.y);
@@ -134,8 +134,215 @@ World.prototype.toString = function(){
 	return output;
 }
 
+World.prototype.turn = function(){
+	var acted = [];
+	this.grid.forEach(function(critter,vector){
+		if(critter.act && acted.indexOf(critter) == -1){
+			acted.push(critter);
+			this.letAct(critter, vector);
+		}
+	},this);
+}
+
+World.prototype.letAct = function(critter,vector){
+	var action = critter.act(new View(this, vector));
+	if(action && action.type == "move"){
+		var dest = this.checkDestination(action, vector);
+		if(dest && this.grid.get(dest) == null){
+			this.grid.set(vector,null);
+			this.grid.set(dest, critter);
+		}
+	}
+}
+
+World.prototype.checkDestination = function(action, vector){
+	if(directions.hasOwnProperty(action.direction)){
+		var dest = vector.plus(directions[action.direction]);
+		if(this.grid.isInside(dest)){
+			return dest;
+		}
+	}
+}
+
+
 function Wall(){}
 
-var world = new World(plan, {'#': Wall,
-							 'o': BouncingCritter});
-console.log(world.toString());
+
+function View(world, vector){
+	this.world = world;
+	this.vector = vector;
+}
+
+View.prototype.look = function(dir){
+	var target = this.vector.plus(directions[dir]);
+	if(this.world.grid.isInside(target)){
+		return charFromElement(this.world.grid.get(target));
+	}else{
+		return "#";
+	}
+}
+
+View.prototype.findAll = function(ch){
+	var found = [];
+	for(var dir in directions){
+		if(this.look(dir) == ch){
+			found.push(dir);
+		}
+	}
+	return found;
+}
+
+View.prototype.find = function(ch){
+	var found = this.findAll(ch);
+	if(found.length == 0){
+		return null;
+	}
+	return randomElement(found);
+}
+
+
+function dirPlus(dir,n){
+	var index = directionNames.indexOf(dir);
+
+	return directionNames[(index + n + 8) % 8]
+}
+
+function WallFollower(){
+	this.dir = "s";
+}
+
+WallFollower.prototype.act = function(view){
+	var start = this.dir;
+	if(view.look(dirPlus(this.dir, -3)) != " "){
+		start = this.dir = dirPlus(this.dir,-2);
+	}
+
+	while(view.look(this.dir) != " "){
+		this.dir = dirPlus(this.dir, 1);
+		if(this.dir == start){
+			break;
+		}
+	}
+	return {type: "move", direction:this.dir};
+}
+
+function LifeLikeWorld(map,legend){
+	World.call(this,map,legend);
+}
+
+LifeLikeWorld.prototype = Object.create(World.prototype);
+
+var actionTypes = Object.create(null);
+
+LifeLikeWorld.prototype.letAct = function(critter,vector){
+	var action = critter.act(new View(this,vector));
+	var handled = action && 
+		action.type in actionTypes &&
+		actionTypes[action.type].call(this,critter,vector,action);
+
+	if(!handled){
+		critter.energy -= 0.2;
+		if(critter.energy <= 0){
+			this.grid.set(vector,null);
+		}
+	}
+}
+
+actionTypes.grow = function(critter){
+	critter.energy += 0.5;
+	return true;
+}
+
+
+actionTypes.move = function(critter,vector,action){
+	var dest = this.checkDestination(action,vector);
+	if(dest == null || critter.energy <= 1 || this.grid.set(dest) != null){
+		return false;
+	}
+
+	critter.energy -= 1;
+	this.grid.set(vector,null);
+	this.grid.set(dest,critter);
+	return true;
+}
+
+actionTypes.eat = function(critter,vector,action){
+	var dest = this.checkDestination(action,vector);
+	var atDest = dest != null && this.grid.set(dest);
+	if(!atDest || atDest.energy == null){
+		return false;
+	}
+
+	critter.energy += atDest.energy;
+	this.grid.set(dest,null);
+	return true;
+}
+
+actionTypes.reproduce = function(critter,vector,action){
+	var baby = elementFromChar(this.legend,critter.originChar);
+	var dest = this.checkDestination(action,vector);
+	if(dest == null || critter.energy <= 2 * baby.energy || this.grid.get(dest) != null){
+		return false;
+	}
+
+	critter.energy -= 2 * baby.energy;
+	this.grid.set(dest,baby);
+	return true;
+}
+
+
+function Plant(){
+	this.energy = 3 + Math.random() * 4;
+}
+
+Plant.prototype.act = function(view){
+	if(this.energy > 15){
+		var space = view.find(" ");
+		if(space){
+			return {type: "reproduce", direction: space};
+		}
+	}
+
+
+	if(this.energy < 20){
+		return {type: "grow"};
+	}
+}
+
+function PlantEater(){
+	this.energy = 20;
+}
+
+PlantEater.prototype.act = function(view){
+	var space = view.find(" ");
+	if(this.energy > 60 && space){
+		return {type: "reproduce",direction: space};
+	}
+
+	var plant = view.find("*");
+	if(plant){
+		return {type: "eat", direction: plant};
+	}
+
+	if(space){
+		return {type: "move", direction: space};
+	}
+}
+
+
+
+var newPlan =   ["############################",
+			     "#####                 ######",
+			     "##   ***                **##",
+			     "#   *##**         **  O  *##",
+			     "#    ***     O    ##**    *#",
+			     "#       O         ##***    #",
+			     "#                 ##**     #",
+			     "#   O       #*             #",
+			     "#*          #**       O    #",
+			     "#***        ##**    O    **#",
+			     "##****     ###***       *###",
+			     "############################"
+			    ];
+var world = new LifeLikeWorld(newPlan, {'#': Wall, 'O': PlantEater, '*': Plant});
+// console.log(world.toString());
