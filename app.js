@@ -330,19 +330,86 @@ PlantEater.prototype.act = function(view){
 }
 
 
+function SmartPlantEater(){
+	this.energy = 30;
+	this.direction = "e";
+}
 
-var newPlan =   ["############################",
-			     "#####                 ######",
-			     "##   ***                **##",
-			     "#   *##**         **  O  *##",
-			     "#    ***     O    ##**    *#",
-			     "#       O         ##***    #",
-			     "#                 ##**     #",
-			     "#   O       #*             #",
-			     "#*          #**       O    #",
-			     "#***        ##**    O    **#",
-			     "##****     ###***       *###",
-			     "############################"
-			    ];
-var world = new LifeLikeWorld(newPlan, {'#': Wall, 'O': PlantEater, '*': Plant});
+SmartPlantEater.prototype.act = function(view){
+	var space = view.find(" ");
+	if(this.energy > 90 && space){
+		return {type: "reproduce", direction: space}
+	}
+
+	var plants = view.findAll("*");
+	if(plants.length > 1){
+		return {type: "eat", direction: randomElement(plants)};
+	}
+
+	if(view.look(this.direction) != " " && space){
+		this.direction = space;
+	}
+
+	return {type: "move", direction: this.direction};
+}
+
+function Tiger(){
+	this.energy = 90;
+	this.direction = "w";
+	this.preySeen = [];
+}
+
+Tiger.prototype.act = function(view){
+	var seenPerTurn = this.preySeen.reduce(function(a,b){
+		return a + b;
+	}, 0) / this.preySeen.length;
+	var prey = view.findAll("O");
+	var prey2 = view.findAll("*");
+
+	if(prey){
+		this.preySeen.push(prey.length);
+	}else{
+		this.preySeen.push(prey2.length);
+	}
+	if(this.preySeen.length > 6){
+		this.preySeen.shift();
+	}
+
+	if(prey.length && seenPerTurn > 0.25){
+		return {type: "eat", direction: randomElement(prey)};
+	}else{
+		return {type: "eat", direction: randomElement(prey2)}
+	}
+
+	var space = view.find(" ");
+	if(this.energy > 400 && space){
+		return {type:"reproduce",direction:space};
+	}
+
+	if(view.look(this.direction) != " " && space){
+		this.direction = space;
+		return {type:"move", direction: this.direction};
+	}
+
+}
+
+var newPlan =    ["####################################################",
+				   "#                 ####         ****              ###",
+				   "#   *  @  ##                 ########       OO    ##",
+				   "#   *    ##        O O                 ****       *#",
+				   "#       ##*                        ##########     *#",
+				   "#      ##***  *         ****                     **#",
+				   "#* **  #  *  ***      #########                  **#",
+				   "#* **  #      *               #   *              **#",
+				   "#     ##              #   O   #  ***          ######",
+				   "#*            @       #       #   *        O  #    #",
+				   "#*                    #  ######                 ** #",
+				   "###          ****          ***                  ** #",
+				   "#       O                        @         O       #",
+				   "#   *     ##  ##  ##  ##               ###      *  #",
+				   "#   **         #              *       #####  O     #",
+				   "##  **  O   O  #  #    ***  ***        ###      ** #",
+				   "###               #   *****                    ****#",
+				   "####################################################"];
+var world = new LifeLikeWorld(newPlan, {'#': Wall, "@": Tiger, "O": SmartPlantEater, '*': Plant});
 // console.log(world.toString());
