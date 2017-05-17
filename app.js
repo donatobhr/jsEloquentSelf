@@ -56,14 +56,27 @@
 
 // console.log(/\bcat\b/.test("cat"));
 
-var stock = "1 lemon, 2 cabbages, and 101 eggs";
-function minusOne(match, amount, unit) {
-  amount = Number(amount) - 1;
-  if (amount == 1) // only one left, remove the 's'
-    unit = unit.slice(0, unit.length - 1);
-  else if (amount == 0)
-    amount = "no";
-  return amount + " " + unit;
-}
-console.log(stock.replace(/(\d+) (\w+)/g, minusOne));
+// var stock = "1 lemon, 2 cabbages, and 101 eggs";
+// function minusOne(match, amount, unit) {
+//   amount = Number(amount) - 1;
+//   if (amount == 1) // only one left, remove the 's'
+//     unit = unit.slice(0, unit.length - 1);
+//   else if (amount == 0)
+//     amount = "no";
+//   return amount + " " + unit;
+// }
+// console.log(stock.replace(/(\d+) (\w+)/g, minusOne));
 // → no lemon, 1 cabbage, and 100 eggs
+
+
+// Ejercicio 2
+
+// var text = "'I'm the cook,' he said, 'it's my job.'";
+// console.log(text.replace(/(^|\w)'|'(\w|$)/g,"$1'$2"));
+// console.log(text.replace(/(^|\W)'|'(\W|$)/g, '$1"$2'));
+
+
+//Ejercicio 3
+// var number = /^(\+|-)?(\d+(\.\d*)?|\.\d+)([eE](\+|-|)\d+)?$/;
+
+// console.log(number.test("32.2E+2"));
