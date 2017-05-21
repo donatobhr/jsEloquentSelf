@@ -68,6 +68,20 @@
 // console.log(stock.replace(/(\d+) (\w+)/g, minusOne));
 // → no lemon, 1 cabbage, and 100 eggs
 
+// ejercicio 1
+
+// verify(/(ca[rt])/,"bad cats");
+// verify(/(pr?op)/,"plop");
+// verify(/(ferr(er|y|ari))/,"ferrum");
+// verify(/(ious\b)/,"delicious");
+// verify(/\s[.,:;]/," hey dot.");
+// verify(/\w{7,}/,"asdfg");
+// verify(/\b[a-df-z]+\b/i,"learning ape");
+// // verify(/\b[^e]+\b/i,"learning ape");
+// function verify(reg,stringToProve){
+// 	console.log(reg.test(stringToProve));
+// }
+
 
 // Ejercicio 2
 
