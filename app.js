@@ -72,31 +72,49 @@ var button = document.querySelector("button");
 // })
 
 
-var lastX; //Track the last observed mouse X position
-var rect = document.querySelector("div");
-rect.addEventListener("mousedown",function(event){
-	if(event.which == 1){
-		lastX = event.pageX;
-		console.log(event.pageY);
-		addEventListener("mousemove", moved);
-		event.preventDefault(); //Prevent selection
-	}
+// var lastX; //Track the last observed mouse X position
+// var rect = document.querySelector("div");
+// rect.addEventListener("mousedown",function(event){
+// 	if(event.which == 1){
+// 		lastX = event.pageX;
+// 		console.log(event.pageY);
+// 		addEventListener("mousemove", moved);
+// 		event.preventDefault(); //Prevent selection
+// 	}
+// });
+
+// function buttonPressed(event){
+// 	if(event.buttons == null)
+// 		return event.which != 0;
+// 	else
+// 		return event.buttons != 0;
+// }
+
+// function moved(event){
+// 	if(!buttonPressed(event)){
+// 		removeEventListener("mousemove",moved);
+// 	}else{
+// 		var dist = event.pageX - lastX;
+// 		var newWidth = Math.max(10, rect.offsetWidth + dist);
+// 		rect.style.width = newWidth + "px";
+// 		lastX = event.pageX;
+// 	}
+// }
+
+
+var para = document.querySelector("p");
+
+function isInside(node,target){
+	for(; node != null; node = node.parentNode)
+		if(node == target) return true;
+};
+
+para.addEventListener("mouseover",function(event){
+	if(!isInside(event.relatedTarget, para))
+		para.style.color = "red";
 });
 
-function buttonPressed(event){
-	if(event.buttons == null)
-		return event.which != 0;
-	else
-		return event.buttons != 0;
-}
-
-function moved(event){
-	if(!buttonPressed(event)){
-		removeEventListener("mousemove",moved);
-	}else{
-		var dist = event.pageX - lastX;
-		var newWidth = Math.max(10, rect.offsetWidth + dist);
-		rect.style.width = newWidth + "px";
-		lastX = event.pageX;
-	}
-}
+para.addEventListener("mouseout",function(event){
+	if(!isInside(event.relatedTarget, para))
+		para.style.color = "";
+});
