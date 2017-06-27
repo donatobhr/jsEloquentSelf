@@ -1,0 +1,30 @@
+{
+  "name": "jseloquentself",
+  "version": "1.0.0",
+  "description": "Proyctos y ejercicios del libro Eloquent Js, los ejercicios pueden se diferentes a como estan en el libro",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/donatobhr/jsEloquentSelf.git"
+  },
+  "keywords": [
+    "eloquentjs",
+    "js",
+    "javascript",
+    "html",
+    "canvas",
+    "prototype"
+  ],
+  "author": "Donato Bencosme",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/donatobhr/jsEloquentSelf/issues"
+  },
+  "homepage": "https://github.com/donatobhr/jsEloquentSelf#readme",
+  "dependencies": {
+    "ecstatic": "^2.2.1"
+  }
+}
