@@ -17,7 +17,7 @@ Router.prototype.resolve = function(request, response){
 			return false;
 
 		var urlParts = match.slice(1).map(decodeURIComponent);
-		route.handler.apply(null,[request, response]).concat(urlParts);
+		route.handler.apply(null,[request, response].concat(urlParts));
 		return true;
 	});
 }

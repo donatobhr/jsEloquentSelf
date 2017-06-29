@@ -11,7 +11,7 @@ var http = require("http");
 var Router = require("./router");
 var ecstatic = require("ecstatic");
 
-var fileServer = ecstatic({root: "./user/Desktop/jsEloquentSelf"});
+var fileServer = ecstatic({root: "./public"});
 var router = new Router();
 
 http.createServer(function(request,response){
@@ -115,7 +115,7 @@ router.add("PUT",/^\/talks\/([^\/]+)$/,function(request,response,title){
 });
 
 
-router.add("POST", /^\/talks\/([^\/])\/comments$/, function(request,response,title){
+router.add("POST", /^\/talks\/([^\/]+)\/comments$/, function(request,response,title){
 	readStreamAsJson(request, function(error,comment){
 		if(error){
 			respond(response, 400, error.toString());
