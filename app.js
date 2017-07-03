@@ -203,7 +203,7 @@ function getChangedTalks(since){
 		else if(change.title in talks)
 			found.push(talks[change.title]);
 		else
-			found.push({title: change.title, delete: true});
+			found.push({title: change.title, deleted: true});
 	}
 	return found;
 }
