@@ -36,24 +36,24 @@ function reportError(error){
 var talkDiv = document.querySelector("#talks");
 var shownTalks = Object.create(null);
 
-function displayTalks(talks){
-	talks.forEach(function(talk){
-		var shown = shownTalks[talk.title];
-		if(talk.deleted){
-			if(shown){
-				talkDiv.removeChild(shown);
-				delete shownTalks[talk.title];
-			}
-		}else{
-			var node = drawTalk(talk);
-			if(shown)
-				talkDiv.replaceChild(node, shown);
-			else
-				talkDiv.appendChild(node);
-			shownTalks[talk.title] = node;
-		}
-	});
-}
+// function displayTalks(talks){
+// 	talks.forEach(function(talk){
+// 		var shown = shownTalks[talk.title];
+// 		if(talk.deleted){
+// 			if(shown){
+// 				talkDiv.removeChild(shown);
+// 				delete shownTalks[talk.title];
+// 			}
+// 		}else{
+// 			var node = drawTalk(talk);
+// 			if(shown)
+// 				talkDiv.replaceChild(node, shown);
+// 			else
+// 				talkDiv.appendChild(node);
+// 			shownTalks[talk.title] = node;
+// 		}
+// 	});
+// }
 
 function instantiateTemplate(name, values){
 	function instantieteText(text){
@@ -146,5 +146,35 @@ function waitForChanges(){
 			 	lastServerTime = response.serverTime;
 			 	waitForChanges();
 			}
+	});
+}
+
+
+
+
+// Ejecicio 2
+function displayTalks(talks){
+	talks.forEach(function(talk){
+		var shown = shownTalks[talk.title];
+		if(talk.deleted){
+			if(shown){
+				talkDiv.removeChild(shown);
+				delete shownTalks[talk.title];
+			}
+		}else{
+			var node = drawTalk(talk);
+			if(shown){
+				var textField = shown.querySelector("input");
+				var hasFocus = document.activeElement == textField;
+				var value = textField.value;
+				talkDiv.replaceChild(node, shown);
+				var newTextField = node.querySelector("input");
+				newTextField.value = value;
+				if(hasFocus) newTextField.focus();
+			}else{
+				talkDiv.appendChild(node);
+			}
+			shownTalks[talk.title] = node;
+		}
 	});
 }

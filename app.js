@@ -10,6 +10,7 @@ where it should look for files.
 var http = require("http");
 var Router = require("./router");
 var ecstatic = require("ecstatic");
+var fs = require("fs");
 
 var fileServer = ecstatic({root: "./public"});
 var router = new Router();
@@ -17,7 +18,7 @@ var router = new Router();
 http.createServer(function(request,response){
 	if(!router.resolve(request,response))
 		fileServer(request,response);
-}).listen(8000);
+}).listen(80,'10.0.0.3');
 
 
 /*
@@ -43,7 +44,7 @@ These will be exposed as HTTP resources
 under /talks/[title]
 */
 
-var talks = Object.create(null);
+// var talks = Object.create(null);
 
 
 /*
@@ -179,13 +180,13 @@ function waitForChanges(since, response){
 
 var changes = [];
 
-function registerChange(title){
-	changes.push({title: title, time: Date.now()});
-	waiting.forEach(function(waiter){
-		sendTalks(getChangedTalks(waiter.since), waiter.response);
-	});
-	waiting = [];
-}
+// function registerChange(title){
+// 	changes.push({title: title, time: Date.now()});
+// 	waiting.forEach(function(waiter){
+// 		sendTalks(getChangedTalks(waiter.since), waiter.response);
+// 	});
+// 	waiting = [];
+// }
 
 function getChangedTalks(since){
 	var found = [];
@@ -206,4 +207,29 @@ function getChangedTalks(since){
 			found.push({title: change.title, deleted: true});
 	}
 	return found;
+}
+
+
+// ejercicio 1
+var talks = loadTalks();
+
+function loadTalks(){
+	var result = Object.create(null), json;
+	try{
+		json = JSON.parse(fs.readFileSync("./talks.json","utf8"));
+	}catch(e){
+		json = {};
+	}
+	for(var title in json)
+		result[title] = json[title];
+	return result;
+}
+
+function registerChange(title){
+	changes.push({title: title, time: Date.now()});
+	waiting.forEach(function(waiter){
+		sendTalks(getChangedTalks(waiter.since), waiter.response);
+	});
+	waiting = [];
+	fs.writeFile("./talks.json", JSON.stringify(talks));
 }
